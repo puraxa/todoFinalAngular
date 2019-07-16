@@ -1,0 +1,33 @@
+<!-- <mat-form-field class="example-full-width">
+    <input matInput id="favFood" name="favFood" placeholder="Favorite food" required [(ngModel)]="favFood" #favFoodCheck="ngModel" type="email" email>
+        <mat-error *ngIf="favFoodCheck.errors?.required">Favorite food is required</mat-error>
+        <mat-error *ngIf="favFoodCheck.errors?.email">Not valid email adress</mat-error>
+</mat-form-field>
+<br>
+<mat-form-field class="example-full-width" style="width: 100%">
+    <input matInput placeholder="Leave a comment">
+</mat-form-field>
+<div style="justify-content: center;align-items:center; height:15vh; width:15vh;">
+    <div>
+        {{favFood}}
+    </div>
+</div> -->
+<div class="row justify-content-center">
+    <div class="col-12 col-sm-12 col col-md-10 col-lg-8 col-xl-6">
+        <form #login="ngForm" (ngSubmit)="onSubmit(login)" style="margin-top:40vh;">
+            <mat-form-field class="input-element">
+                <input matInput type="email" placeholder="Email" name="email" required #email="ngModel" email ngModel>
+                <mat-error *ngIf="email.errors?.required">Email is required</mat-error>
+                <mat-error *ngIf="email.errors?.email">This is not valid email adress</mat-error>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="input-element">
+                <input matInput type="password" placeholder="Password" name="password" required ngModel #password="ngModel">
+            </mat-form-field>
+            <br>
+            <button mat-raised-button type="submit" [disabled]="email.errors?.required || email.errors?.email || password.errors?.required  || spin">Login</button>
+            <mat-error>{{errorMessage}}</mat-error>
+        </form>
+    </div>
+</div>
+<app-spinner *ngIf="spin"></app-spinner>

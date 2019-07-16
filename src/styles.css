@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+body {
+    font-family: 'Raleway', sans-serif;
+}
+.input-element {
+    width:100%;
+}
+input {
+    width: 100%;
+    font-size: 32px;
+}
+mat-spinner {
+    margin: auto;
+    margin-top: 45vh;
+}

@@ -1,0 +1,13 @@
+<form #item="ngForm" (ngSubmit)="addItem($event)">
+    <mat-form-field class="input-element">
+        <input matInput type="text" placeholder="New item value" name="value" required #value="ngModel" ngModel>
+        <mat-error *ngIf="value.errors?.required">Can't be empty</mat-error>
+    </mat-form-field>
+    <br>
+    <label for="files">Select files for upload</label>
+    <input type="file" name="files" id="files" multiple>
+    <br>
+    <button mat-raised-button type="submit" [disabled]="value.errors?.required || spin">Add</button>
+    <mat-error>{{errorMessage}}</mat-error>
+    <mat-progress-spinner *ngIf="uploadPercentage" mode="determinate" value="{{ uploadPercentage | async  }}" style="position:relative; top:-50%; margin:auto;"></mat-progress-spinner>
+</form>

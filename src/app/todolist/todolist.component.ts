@@ -1,0 +1,119 @@
+import { Component, OnInit, HostListener } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { BottomSheetComponent } from '../bottom-sheet/bottom-sheet.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { finalize } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-todolist',
+  templateUrl: './todolist.component.html',
+  styleUrls: ['./todolist.component.css']
+})
+export class TodolistComponent implements OnInit {
+  width:boolean = false;
+  items;
+  editValue:string;
+  doneItems;
+  errorMessage:string;
+  uploadPercentage;
+  constructor(private firestore:AngularFirestore,private storage:AngularFireStorage, private bottomSheet:MatBottomSheet, private snackBar:MatSnackBar) {
+    this.items = firestore.collection('items',ref => ref.where('done','==',false).orderBy('dateCreated','desc')).valueChanges();
+    this.doneItems = firestore.collection('items', ref => ref.where('done','==',true).orderBy('dateCreated','desc')).valueChanges();
+  }
+  @HostListener('window:resize',['$event'])
+  onResize = (event) => {
+    if(event.target.innerWidth < 576){
+      return this.width = true;
+    }
+    this.width = false;
+  }
+  ngOnInit() {
+    if(window.innerWidth < 576){
+      this.width = true;
+    }
+  }
+  openSnackBar = () => {
+    this.snackBar.open(this.errorMessage,'OK');
+  }
+  openBottomSheet = () => {
+    this.bottomSheet.open(BottomSheetComponent);
+  }
+  done = async(id) => {
+    try {
+      const data = await this.firestore
+        .collection("items")
+        .doc(id)
+        .get()
+        .toPromise();
+      const done = data.data().done;
+      await this.firestore
+        .collection("items")
+        .doc(id)
+        .update({ done: !done });
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.openSnackBar();
+    }
+  }
+  download = async(path) => {
+    try {
+      const url = await this.storage.ref(path).getDownloadURL().toPromise();
+      console.log(url);
+      window.location.href = url;
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.openSnackBar();
+    }
+    // this.storage.ref(path).getDownloadURL();
+    // window.open(url)
+    // console.log(path);
+  }
+  drop = (event) => {
+    if(event.container != event.previousContainer){
+      this.done(event.item.element.nativeElement.id);
+    }
+  }
+  edit = async(id) => {
+    try {
+      const data = await this.firestore.collection('items').doc(id).get().toPromise();
+      const edit = data.data().edit;
+      await this.firestore.collection('items').doc(id).update({edit: !edit});
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.openSnackBar();
+    }
+  }
+  editItem = async(id) => {
+    try {
+      this.firestore.collection('items').doc(id).update({value: this.editValue});
+      this.editValue = null;
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.openSnackBar();
+    }
+  }
+  uploadFile = async(event) => {
+    try {
+      const response = await this.firestore.collection('items').doc(event.target.id).get().toPromise();
+      let array = response.data().files;
+      for(let i = 0; i < event.target.files.length; i++){
+        if(response.data().files.findIndex(index => index.fileName === event.target.files[i].name)>-1){
+          throw new Error('File ' + event.target.files[i].name + ' already exists on this item');
+        }
+      }
+      for(let i = 0; i < event.target.files.length; i++){
+        this.uploadPercentage = this.storage.upload(event.target.id + '/' + event.target.files[i].name,event.target.files[i]).percentageChanges();
+        this.storage.upload(event.target.id + '/' + event.target.files[i].name,event.target.files[i]).snapshotChanges().pipe(finalize(()=>{
+          this.uploadPercentage = null;
+        })).subscribe();
+        array.push({fileName: event.target.files[i].name, path: event.target.id + '/' + event.target.files[i].name});
+      }
+      await this.firestore.collection('items').doc(event.target.id).update({files: array}); 
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.openSnackBar();
+    }
+  }
+}

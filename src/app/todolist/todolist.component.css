@@ -1,0 +1,13 @@
+.unshow {
+    overflow: hidden;
+    height: 50px;
+    transition: height 1s;
+}
+.show {
+    height: 100%;
+}
+button {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+}

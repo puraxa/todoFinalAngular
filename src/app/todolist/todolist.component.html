@@ -1,0 +1,138 @@
+<mat-progress-bar *ngIf="uploadPercentage" mode="determinate" value="{{uploadPercentage | async}}"></mat-progress-bar>
+<div *ngIf="!width" class="row">
+    <div class="col-6"
+    cdkDropList (cdkDropListDropped)="drop($event)"
+    [cdkDropListData]="items" 
+    [cdkDropListConnectedTo]="doneList" 
+    #list="cdkDropList">
+        <h2 style="text-align: center">Todo</h2>
+        <ul class="list-group">
+            <li cdkDrag class="list-group-item" *ngFor="let item of items | async"  [ngClass]="{'unshow': !item.edit, 'show': item.edit}" [attr.id]="item.id">
+                <div class="row">
+                    <div class="col-2">
+                        <input type="checkbox" (change)="done(item.id)">
+                    </div>
+                    <div class="col-10" (click)="edit(item.id)">
+                        {{item.value}}
+                    </div>
+                </div>
+                <div class="row" style="padding: 0.75rem 1.25rem;">
+                    <div class="col-12">
+                        <mat-form-field class="input-element">
+                            <input matInput type="text" placeholder="Edit item value" [(ngModel)]="editValue" (change)="editItem(item.id)">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12">
+                        <input type="file" multiple (change)="uploadFile($event)" [attr.id]="item.id">
+                    </div>
+                </div>
+                <div class="row" *ngFor="let file of item.files" style="padding: 0.75rem 1.25rem;">
+                    <div class="col-12">
+                        <a (click)="download(file.path)">{{file.fileName}}</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="col-6"
+    cdkDropList (cdkDropListDropped)="drop($event)"
+    [cdkDropListData]="dontItems" 
+    [cdkDropListConnectedTo]="list" 
+    #doneList="cdkDropList">
+    <h2 style="text-align: center">Done</h2>
+        <ul class="list-group">
+            <li cdkDrag class="list-group-item" *ngFor="let doneItem of doneItems | async"  [ngClass]="{'unshow': !doneItem.edit, 'show': doneItem.edit}" [attr.id]="doneItem.id">
+                <div class="row">
+                    <div class="col-2">
+                        <input type="checkbox" (change)="done(doneItem.id)" checked>
+                    </div>
+                    <div class="col-10" (click)="edit(doneItem.id)">
+                        {{doneItem.value}}
+                    </div>
+                </div>
+                <div class="row" style="padding: 0.75rem 1.25rem;">
+                    <div class="col-12">
+                        <mat-form-field class="input-element">
+                            <input matInput type="text" placeholder="Edit item value" [(ngModel)]="editValue" (change)="editItem(doneItem.id)">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12">
+                        <input type="file" multiple (change)="uploadFile($event)" [attr.id]="doneItem.id">
+                    </div>
+                </div>
+                <div class="row" *ngFor="let file of doneItem.files" style="padding: 0.75rem 1.25rem;">
+                    <div class="col-12">
+                        <a (click)="download(file.path)">{{file.fileName}}</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div *ngIf="width">
+    <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="Todo">
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let item of items | async" [ngClass]="{'unshow': !item.edit, 'show': item.edit}">
+                        <div class="row">
+                            <div class="col-2">
+                                <input type="checkbox"  (change)="done(item.id)">
+                            </div>
+                            <div class="col-10" (click)="edit(item.id)">
+                                {{item.value}}
+                            </div>
+                            <div class="row" style="padding: 0.75rem 1.25rem;">
+                                <div class="col-12">
+                                    <mat-form-field class="input-element">
+                                        <input matInput type="text" placeholder="Edit item value" [(ngModel)]="editValue" (change)="editItem(item.id)">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12">
+                                    <input type="file" multiple (change)="uploadFile($event)" [attr.id]="item.id">
+                                </div>
+                            </div>
+                            <div class="row" *ngFor="let file of item.files" style="padding: 0.75rem 1.25rem;">
+                                <div class="col-12">
+                                    <a (click)="download(file.path)">{{file.fileName}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </mat-tab>
+        <mat-tab label="Done">
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let doneItem of doneItems | async" [ngClass]="{'unshow': !doneItem.edit, 'show': doneItem.edit}">
+                        <div class="row">
+                            <div class="col-2">
+                                <input type="checkbox"  (change)="done(doneItem.id)" checked>
+                            </div>
+                            <div class="col-10" (click)="edit(doneItem.id)">
+                                {{doneItem.value}}
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 0.75rem 1.25rem;">
+                            <div class="col-12">
+                                <mat-form-field class="input-element">
+                                    <input matInput type="text" placeholder="Edit item value" [(ngModel)]="editValue" (change)="editItem(doneItem.id)">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-12">
+                                <input type="file" multiple (change)="uploadFile($event)" [attr.id]="doneItem.id">
+                            </div>
+                        </div>
+                        <div class="row" *ngFor="let file of doneItem.files" style="padding: 0.75rem 1.25rem;">
+                            <div class="col-12">
+                                <a (click)="download(file.path)">{{file.fileName}}</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+<button mat-fab (click)="openBottomSheet()">Add</button>

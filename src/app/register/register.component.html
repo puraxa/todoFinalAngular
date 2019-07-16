@@ -1,0 +1,22 @@
+<div class="row justify-content-center">
+    <div class="col-12 col-sm-12 col col-md-10 col-lg-8 col-xl-6">
+        <form #form="ngForm" (ngSubmit)="onSubmit(form)" style="margin-top:30vh;">
+            <mat-form-field class="input-element">
+                <input matInput type="email" placeholder="Email" name="email" required #email="ngModel" email ngModel>
+                <mat-error *ngIf="email.errors?.required">Email is required</mat-error>
+                <mat-error *ngIf="email.errors?.email">This is not valid email adress</mat-error>
+            </mat-form-field>
+            <mat-form-field class="input-element">
+                <input matInput type="password" placeholder="Password" name="password" required #password="ngModel" ngModel>
+                <mat-error *ngIf="password.errors?.required">Password is required</mat-error>
+            </mat-form-field>
+            <mat-form-field class="input-element">
+                <input matInput type="password" placeholder="Repeat password" name="repeatPassword" required #repeatPassword="ngModel" ngModel>
+                <mat-error *ngIf="repeatPassword.errors?.required">This field is required</mat-error>
+            </mat-form-field>
+            <button mat-raised-button type="submit" [disabled]="email.errors?.required || repeatPassword.errors?.required || password.errors?.required || spin">Login</button>
+            <mat-error>{{errorMessage}}</mat-error>
+        </form>
+    </div>
+</div>
+<app-spinner *ngIf="spin"></app-spinner>
