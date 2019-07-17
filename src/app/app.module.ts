@@ -17,6 +17,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { MatSnackBarModule } from '@angular/material/snack-bar'; 
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import { MatProgressBarModule } from '@angular/material/progress-bar'; 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -57,7 +59,9 @@ import { NavigationComponent } from './navigation/navigation.component';
     AngularFirestoreModule,
     MatSnackBarModule,
     AngularFireAuthGuardModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    NgbModule,
+    FontAwesomeModule
   ],
   entryComponents:[
     BottomSheetComponent

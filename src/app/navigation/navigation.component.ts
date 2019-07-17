@@ -9,7 +9,6 @@ import { GlobalAuthService } from '../global-auth.service';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
-
   constructor(private auth:AngularFireAuth, private router:Router, private globalAuth:GlobalAuthService) { }
 
   ngOnInit() {

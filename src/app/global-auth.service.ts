@@ -5,6 +5,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
   providedIn: 'root'
 })
 export class GlobalAuthService {
+  isCollapsed:true;
   loggedIn: boolean;
   constructor(private auth:AngularFireAuth) { }
   checkAuth = () => {

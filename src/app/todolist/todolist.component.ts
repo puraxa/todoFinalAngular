@@ -5,6 +5,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize } from 'rxjs/operators';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-todolist',
@@ -12,12 +13,14 @@ import { finalize } from 'rxjs/operators';
   styleUrls: ['./todolist.component.css']
 })
 export class TodolistComponent implements OnInit {
+  faEdit = faEdit;
   width:boolean = false;
   items;
   editValue:string;
   doneItems;
   errorMessage:string;
   uploadPercentage;
+  opened:string;
   constructor(private firestore:AngularFirestore,private storage:AngularFireStorage, private bottomSheet:MatBottomSheet, private snackBar:MatSnackBar) {
     this.items = firestore.collection('items',ref => ref.where('done','==',false).orderBy('dateCreated','desc')).valueChanges();
     this.doneItems = firestore.collection('items', ref => ref.where('done','==',true).orderBy('dateCreated','desc')).valueChanges();
@@ -32,6 +35,11 @@ export class TodolistComponent implements OnInit {
   ngOnInit() {
     if(window.innerWidth < 576){
       this.width = true;
+    }
+  }
+  closeOpen = () => {
+    if(this.opened){
+      this.firestore.collection('items').doc(this.opened).update({show: false, edit: false}).then(data => this.opened = null);
     }
   }
   openSnackBar = () => {
@@ -61,7 +69,7 @@ export class TodolistComponent implements OnInit {
     try {
       const url = await this.storage.ref(path).getDownloadURL().toPromise();
       console.log(url);
-      window.location.href = url;
+      window.open(url, '_blank');
     } catch (err) {
       this.errorMessage = err.message;
       this.openSnackBar();
@@ -77,9 +85,13 @@ export class TodolistComponent implements OnInit {
   }
   edit = async(id) => {
     try {
+      if(this.opened != id){
+        await this.closeOpen();
+      }
       const data = await this.firestore.collection('items').doc(id).get().toPromise();
       const edit = data.data().edit;
       await this.firestore.collection('items').doc(id).update({edit: !edit});
+      this.opened = id;
     } catch (err) {
       this.errorMessage = err.message;
       this.openSnackBar();
@@ -106,11 +118,25 @@ export class TodolistComponent implements OnInit {
       for(let i = 0; i < event.target.files.length; i++){
         this.uploadPercentage = this.storage.upload(event.target.id + '/' + event.target.files[i].name,event.target.files[i]).percentageChanges();
         this.storage.upload(event.target.id + '/' + event.target.files[i].name,event.target.files[i]).snapshotChanges().pipe(finalize(()=>{
+          this.firestore.collection('items').doc(event.target.id).update({files: array}); 
           this.uploadPercentage = null;
         })).subscribe();
         array.push({fileName: event.target.files[i].name, path: event.target.id + '/' + event.target.files[i].name});
       }
-      await this.firestore.collection('items').doc(event.target.id).update({files: array}); 
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.openSnackBar();
+    }
+  }
+  showFiles = async(id) => {
+    try {
+      if(this.opened != id){
+        await this.closeOpen();
+      }
+      const data = await this.firestore.collection('items').doc(id).get().toPromise();
+      const show = data.data().show;
+      await this.firestore.collection('items').doc(id).update({show: !show});
+      this.opened = id;
     } catch (err) {
       this.errorMessage = err.message;
       this.openSnackBar();
