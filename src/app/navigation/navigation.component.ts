@@ -13,6 +13,7 @@ export class NavigationComponent implements OnInit {
 
   ngOnInit() {
     this.globalAuth.checkAuth();
+    this.globalAuth.isCollapsed = true;
   }
   logout = () => {
     this.auth.auth.signOut()

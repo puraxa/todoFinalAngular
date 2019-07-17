@@ -68,7 +68,6 @@ export class TodolistComponent implements OnInit {
   download = async(path) => {
     try {
       const url = await this.storage.ref(path).getDownloadURL().toPromise();
-      console.log(url);
       window.open(url, '_blank');
     } catch (err) {
       this.errorMessage = err.message;
