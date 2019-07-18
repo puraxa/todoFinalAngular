@@ -14,7 +14,7 @@
                 <input matInput type="password" placeholder="Repeat password" name="repeatPassword" required #repeatPassword="ngModel" ngModel>
                 <mat-error *ngIf="repeatPassword.errors?.required">This field is required</mat-error>
             </mat-form-field>
-            <button mat-raised-button type="submit" [disabled]="email.errors?.required || repeatPassword.errors?.required || password.errors?.required || spin">Login</button>
+            <button mat-raised-button type="submit" [disabled]="email.errors?.required || repeatPassword.errors?.required || password.errors?.required || spin">Register</button>
             <mat-error>{{errorMessage}}</mat-error>
         </form>
     </div>
