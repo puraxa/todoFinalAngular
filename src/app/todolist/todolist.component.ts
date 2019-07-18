@@ -149,10 +149,9 @@ export class TodolistComponent implements OnInit {
     try {
       this.spin = true;
       const response = await this.firestore.collection('items').doc(id).get().toPromise();
-      console.log(response.data().files.length);
       if (response.data().files.length > 0) {
         for (let i = 0; i < response.data().files.length; i++) {
-          await this.storage.storage.ref(response.data().files[i].path).delete();
+          await this.deleteFile(id, response.data().files[i].path);
         }
       }
       await this.firestore.collection('items').doc(id).delete();

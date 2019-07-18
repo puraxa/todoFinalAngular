@@ -11,21 +11,12 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
   styleUrls: ['./bottom-sheet.component.css']
 })
 export class BottomSheetComponent implements OnInit {
-  uploadPercentage;
+  uploading:Array<any> = [];
+  files:Array<any> = [];
+  counter:number = 0;
   constructor(private storage:AngularFireStorage, private auth:AngularFireAuth, private firestore:AngularFirestore, private bottomSheet:MatBottomSheet) { }
 
   ngOnInit() {
-  }
-  checkDuplicate = (array) => {
-    console.log(array);
-    let seen = {};
-    for(let i = 0; i < array.length; i++){
-      if(array[i].name in seen){
-        return true;
-      }
-      seen[array[i].name] = true;
-    }
-    return false;
   }
   addItem = async(event) => {
     try {
@@ -33,16 +24,25 @@ export class BottomSheetComponent implements OnInit {
       let files:Array<any> = [];
       const forUpload = event.target[1].files;
       for(let i = 0; i < forUpload.length; i++){
-        this.uploadPercentage = this.storage.upload(id+'/'+forUpload[i].name,forUpload[i]).percentageChanges();
-        files.push({fileName: event.target[1].files[i].name, path: id+'/'+event.target[1].files[i].name});
-        this.storage.upload(id + '/' + forUpload[i].name,forUpload[i]).snapshotChanges().pipe(finalize(()=>{
-          this.uploadPercentage = null;
+        this.uploading.push({progress:0, name:forUpload[i].name});
+        this.uploadFile(id,forUpload[i],i);
+        files.push({fileName: forUpload[i].name, path: id+'/'+forUpload[i].name});
+      }
+      setInterval(()=>{
+        if(this.counter == forUpload.length){
           this.firestore.collection('items').doc(id).set({id: id,value: event.target[0].value, done: false, edit: false, show: false, dateCreated: new Date(), files:files});
           this.bottomSheet.dismiss();
-        })).subscribe();
-      } 
+          clearInterval();
+        }
+      },1500);
     } catch (err) {
       console.log(err);
     }
+  }
+  uploadFile = (id, file, index) => {
+    this.uploading[index].progress = this.storage.upload(id+'/'+file.name,file).percentageChanges();
+    this.storage.upload(id + '/' + file.name,file).snapshotChanges().pipe(finalize(()=>{
+      this.counter++;
+    })).subscribe();
   }
 }
