@@ -12,10 +12,10 @@
                     <div class="col-2">
                         <input type="checkbox" (change)="done(item.id)">
                     </div>
-                    <div class="col-8" (click)="showFiles(item.id)">
+                    <div class="col-8 value" (click)="showFiles(item.id)">
                         {{item.value}}
                     </div>
-                    <div class="col-2" (click)="edit(item.id)">
+                    <div class="col-2 value" (click)="edit(item.id)">
                         <fa-icon [icon]="faEdit"></fa-icon>
                     </div>
                 </div>
@@ -56,10 +56,10 @@
                     <div class="col-2">
                         <input type="checkbox" (change)="done(doneItem.id)" checked>
                     </div>
-                    <div class="col-8" (click)="showFiles(doneItem.id)">
+                    <div class="col-8 value" (click)="showFiles(doneItem.id)">
                         {{doneItem.value}}
                     </div>
-                    <div class="col-2" (click)="edit(doneItem.id)">
+                    <div class="col-2 value" (click)="edit(doneItem.id)">
                         <fa-icon [icon]="faEdit"></fa-icon>
                     </div>
                 </div>
@@ -99,10 +99,10 @@
                             <div class="col-2">
                                 <input type="checkbox" (change)="done(item.id)">
                             </div>
-                            <div class="col-8" (click)="showFiles(item.id)">
+                            <div class="col-8 value" (click)="showFiles(item.id)">
                                 {{item.value}}
                             </div>
-                            <div class="col-2" (click)="edit(item.id)">
+                            <div class="col-2 value" (click)="edit(item.id)">
                                 <fa-icon [icon]="faEdit"></fa-icon>
                             </div>
                         </div>
@@ -140,10 +140,10 @@
                             <div class="col-2">
                                 <input type="checkbox" (change)="done(doneItem.id)" checked>
                             </div>
-                            <div class="col-8" (click)="showFiles(doneItem.id)">
+                            <div class="col-8 value" (click)="showFiles(doneItem.id)">
                                 {{doneItem.value}}
                             </div>
-                            <div class="col-2" (click)="edit(doneItem.id)">
+                            <div class="col-2 value" (click)="edit(doneItem.id)">
                                 <fa-icon [icon]="faEdit"></fa-icon>
                             </div>
                         </div>

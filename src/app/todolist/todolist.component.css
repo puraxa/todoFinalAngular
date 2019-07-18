@@ -15,3 +15,6 @@ span:hover {
     color: blue;
     cursor: pointer;
 }
+.value:hover {
+    cursor: pointer;
+}
