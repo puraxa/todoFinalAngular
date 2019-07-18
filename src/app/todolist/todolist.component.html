@@ -36,8 +36,12 @@
                 <div class="row" *ngIf="item.show" style="padding: 0.75rem 1.25rem;">
                     <div class="col-12">
                         <ul>
-                            <li *ngFor="let file of item.files" (click)="download(file.path)">
-                                <span>{{file.fileName}}</span>
+                            <li *ngFor="let file of item.files">
+                                <div class="row value">
+                                    <div class="col-10 links" (click)="download(file.path)">{{file.fileName}}</div>
+                                    <div class="col-2" (click)="deleteFile(item.id, file.path)"><fa-icon [icon]="faTrash"></fa-icon></div>
+                                </div>
+                                <!-- <span>{{file.fileName}} <fa-icon [icon]="faTrash"></fa-icon></span> -->
                             </li>
                         </ul>
                     </div>
@@ -80,8 +84,11 @@
                 <div class="row" *ngIf="doneItem.show" style="padding: 0.75rem 1.25rem;">
                     <div class="col-12">
                         <ul>
-                            <li *ngFor="let file of doneItem.files" (click)="download(file.path)">
-                                <span>{{file.fileName}}</span>
+                            <li *ngFor="let file of doneItem.files">
+                                <div class="row value">
+                                    <div class="col-10 links" (click)="download(file.path)">{{file.fileName}}</div>
+                                    <div class="col-2" (click)="deleteFile(doneItem.id, file.path)"><fa-icon [icon]="faTrash"></fa-icon></div>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -123,8 +130,11 @@
                         <div class="row" *ngIf="item.show" style="padding: 0.75rem 1.25rem;">
                             <div class="col-12">
                                 <ul>
-                                    <li *ngFor="let file of item.files" (click)="download(file.path)">
-                                        <span>{{file.fileName}}</span>
+                                    <li *ngFor="let file of item.files">
+                                        <div class="row value">
+                                            <div class="col-10 links" (click)="download(file.path)">{{file.fileName}}</div>
+                                            <div class="col-2" (click)="deleteFile(item.id, file.path)"><fa-icon [icon]="faTrash"></fa-icon></div>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -164,8 +174,11 @@
                         <div class="row" *ngIf="doneItem.show" style="padding: 0.75rem 1.25rem;">
                             <div class="col-12">
                                 <ul>
-                                    <li *ngFor="let file of doneItem.files" (click)="download(file.path)">
-                                        <span>{{file.fileName}}</span>
+                                    <li *ngFor="let file of doneItem.files">
+                                        <div class="row value">
+                                            <div class="col-10 links" (click)="download(file.path)">{{file.fileName}}</div>
+                                            <div class="col-2" (click)="deleteFile(doneItem.id, file.path)"><fa-icon [icon]="faTrash"></fa-icon></div>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>

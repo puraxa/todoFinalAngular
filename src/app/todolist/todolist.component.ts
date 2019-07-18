@@ -163,4 +163,21 @@ export class TodolistComponent implements OnInit {
       this.openSnackBar();
     }
   }
+  deleteFile = async(id, path) => {
+    try {
+      const response = await this.firestore.collection('items').doc(id).get().toPromise();
+      const currentFiles = response.data().files;
+      const newFiles:Array<any> = [];
+      for(let i = 0; i < currentFiles.length; i++){
+        if(currentFiles[i].path != path){
+          newFiles.push(currentFiles[i]);
+        }
+      }
+      await this.firestore.collection('items').doc(id).update({files: newFiles});
+      await this.storage.storage.ref(path).delete();
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.spin = false;
+    }
+  }
 }

@@ -32,7 +32,6 @@ export class BottomSheetComponent implements OnInit {
       const id = this.firestore.createId();
       let files:Array<any> = [];
       const forUpload = event.target[1].files;
-      console.log(event.target);
       for(let i = 0; i < forUpload.length; i++){
         this.uploadPercentage = this.storage.upload(id+'/'+forUpload[i].name,forUpload[i]).percentageChanges();
         files.push({fileName: event.target[1].files[i].name, path: id+'/'+event.target[1].files[i].name});
