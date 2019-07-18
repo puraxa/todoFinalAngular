@@ -6,6 +6,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize } from 'rxjs/operators';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'app-todolist',
@@ -14,6 +16,8 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 })
 export class TodolistComponent implements OnInit {
   faEdit = faEdit;
+  faTrash = faTrash;
+  spin:boolean;
   width:boolean = false;
   items;
   editValue:string;
@@ -138,6 +142,24 @@ export class TodolistComponent implements OnInit {
       this.opened = id;
     } catch (err) {
       this.errorMessage = err.message;
+      this.openSnackBar();
+    }
+  }
+  deleteItem = async(id) => {
+    try {
+      this.spin = true;
+      const response = await this.firestore.collection('items').doc(id).get().toPromise();
+      console.log(response.data().files.length);
+      if (response.data().files.length > 0) {
+        for (let i = 0; i < response.data().files.length; i++) {
+          await this.storage.storage.ref(response.data().files[i].path).delete();
+        }
+      }
+      await this.firestore.collection('items').doc(id).delete();
+      this.spin = false;
+    } catch (err) {
+      this.errorMessage = err.message;
+      this.spin = false;
       this.openSnackBar();
     }
   }

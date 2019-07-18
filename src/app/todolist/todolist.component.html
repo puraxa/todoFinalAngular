@@ -1,3 +1,4 @@
+<app-spinner *ngIf="spin"></app-spinner>
 <mat-progress-bar *ngIf="uploadPercentage" mode="determinate" value="{{uploadPercentage | async}}"></mat-progress-bar>
 <div *ngIf="!width" class="row">
     <div class="col-6"
@@ -12,11 +13,14 @@
                     <div class="col-2">
                         <input type="checkbox" (change)="done(item.id)">
                     </div>
-                    <div class="col-8 value" (click)="showFiles(item.id)">
+                    <div class="col-6 value" (click)="showFiles(item.id)">
                         {{item.value}}
                     </div>
-                    <div class="col-2 value" (click)="edit(item.id)">
+                    <div class="col-2 value" (click)="edit(item.id)" style="text-align: center;">
                         <fa-icon [icon]="faEdit"></fa-icon>
+                    </div>
+                    <div class="col-2 value" (click)="deleteItem(item.id)" style="text-align: center;">
+                        <fa-icon [icon]="faTrash"></fa-icon>
                     </div>
                 </div>
                 <div class="row" style="padding: 0.75rem 1.25rem;" *ngIf="item.edit">

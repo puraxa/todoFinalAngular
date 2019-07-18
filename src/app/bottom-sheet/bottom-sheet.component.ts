@@ -31,15 +31,17 @@ export class BottomSheetComponent implements OnInit {
     try {
       const id = this.firestore.createId();
       let files:Array<any> = [];
-      for(let i = 0; i < event.target[1].files.length; i++){
-        this.uploadPercentage = this.storage.upload(id+'/'+event.target[1].files[i].name,event.target[1].files[i]).percentageChanges();
-        this.storage.upload(event.target[0].id + '/' + event.target[1].files[i].name,event.target[1].files[i]).snapshotChanges().pipe(finalize(()=>{
-          this.uploadPercentage = null;
-        })).subscribe();
+      const forUpload = event.target[1].files;
+      console.log(event.target);
+      for(let i = 0; i < forUpload.length; i++){
+        this.uploadPercentage = this.storage.upload(id+'/'+forUpload[i].name,forUpload[i]).percentageChanges();
         files.push({fileName: event.target[1].files[i].name, path: id+'/'+event.target[1].files[i].name});
+        this.storage.upload(id + '/' + forUpload[i].name,forUpload[i]).snapshotChanges().pipe(finalize(()=>{
+          this.uploadPercentage = null;
+          this.firestore.collection('items').doc(id).set({id: id,value: event.target[0].value, done: false, edit: false, show: false, dateCreated: new Date(), files:files});
+          this.bottomSheet.dismiss();
+        })).subscribe();
       } 
-      await this.firestore.collection('items').doc(id).set({id: id,value: event.target[0].value, done: false, edit: false, show: false, dateCreated: new Date(), files:files});
-      this.bottomSheet.dismiss();
     } catch (err) {
       console.log(err);
     }
