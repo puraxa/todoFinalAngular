@@ -64,11 +64,14 @@
                     <div class="col-2">
                         <input type="checkbox" (change)="done(doneItem.id)" checked>
                     </div>
-                    <div class="col-8 value" (click)="showFiles(doneItem.id)">
+                    <div class="col-6 value" (click)="showFiles(doneItem.id)">
                         {{doneItem.value}}
                     </div>
-                    <div class="col-2 value" (click)="edit(doneItem.id)">
+                    <div class="col-2 value" (click)="edit(doneItem.id)" style="text-align: center;">
                         <fa-icon [icon]="faEdit"></fa-icon>
+                    </div>
+                    <div class="col-2 value" (click)="deleteItem(doneItem.id)" style="text-align: center;">
+                        <fa-icon [icon]="faTrash"></fa-icon>
                     </div>
                 </div>
                 <div class="row" style="padding: 0.75rem 1.25rem;" *ngIf="doneItem.edit">
@@ -110,11 +113,14 @@
                             <div class="col-2">
                                 <input type="checkbox" (change)="done(item.id)">
                             </div>
-                            <div class="col-8 value" (click)="showFiles(item.id)">
+                            <div class="col-6 value" (click)="showFiles(item.id)">
                                 {{item.value}}
                             </div>
-                            <div class="col-2 value" (click)="edit(item.id)">
+                            <div class="col-2 value" (click)="edit(item.id)" style="text-align: center;">
                                 <fa-icon [icon]="faEdit"></fa-icon>
+                            </div>
+                            <div class="col-2 value" (click)="deleteItem(item.id)" style="text-align: center;">
+                                <fa-icon [icon]="faTrash"></fa-icon>
                             </div>
                         </div>
                         <div class="row" style="padding: 0.75rem 1.25rem;" *ngIf="item.edit">
@@ -154,11 +160,14 @@
                             <div class="col-2">
                                 <input type="checkbox" (change)="done(doneItem.id)" checked>
                             </div>
-                            <div class="col-8 value" (click)="showFiles(doneItem.id)">
+                            <div class="col-6 value" (click)="showFiles(doneItem.id)">
                                 {{doneItem.value}}
                             </div>
-                            <div class="col-2 value" (click)="edit(doneItem.id)">
+                            <div class="col-2 value" (click)="edit(doneItem.id)" style="text-align: center;">
                                 <fa-icon [icon]="faEdit"></fa-icon>
+                            </div>
+                            <div class="col-2 value" (click)="deleteItem(doneItem.id)" style="text-align: center;">
+                                <fa-icon [icon]="faTrash"></fa-icon>
                             </div>
                         </div>
                         <div class="row" style="padding: 0.75rem 1.25rem;" *ngIf="doneItem.edit">
