@@ -28,11 +28,11 @@ export class BottomSheetComponent implements OnInit {
         this.uploadFile(id,forUpload[i],i);
         files.push({fileName: forUpload[i].name, path: id+'/'+forUpload[i].name});
       }
-      setInterval(()=>{
+      let interval = setInterval(()=>{
         if(this.counter == forUpload.length){
           this.firestore.collection('items').doc(id).set({id: id,value: event.target[0].value, done: false, edit: false, show: false, dateCreated: new Date(), files:files});
           this.bottomSheet.dismiss();
-          clearInterval();
+          clearInterval(interval);
         }
       },1500);
     } catch (err) {
