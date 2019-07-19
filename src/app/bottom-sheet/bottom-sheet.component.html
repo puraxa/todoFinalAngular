@@ -12,7 +12,5 @@
     <div *ngFor="let file of uploading">
         {{file.name}}
         <ngb-progressbar type="success" [value]="file.progress | async" [striped]="true" [animated]="true"></ngb-progressbar>
-        <!-- <mat-progress-spinner mode="determinate" value="{{ file.progress | async }}"></mat-progress-spinner> -->
     </div>
-    <!-- <mat-progress-spinner *ngIf="uploadPercentage" mode="determinate" value="{{ uploadPercentage | async }}" style="position:relative; top:-50%; margin:auto;"></mat-progress-spinner> -->
 </form>

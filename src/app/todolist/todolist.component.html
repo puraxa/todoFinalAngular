@@ -32,6 +32,10 @@
                     <div class="col-12">
                         <input type="file" multiple (change)="uploadFile($event)" [attr.id]="item.id">
                     </div>
+                    <div *ngFor="let file of uploading" class="col-12">
+                        {{file.name}}
+                        <ngb-progressbar type="success" [value]="file.progress | async" [striped]="true" [animated]="true"></ngb-progressbar>
+                    </div>                
                 </div>
                 <div class="row" *ngIf="item.show" style="padding: 0.75rem 1.25rem;">
                     <div class="col-12">
@@ -83,6 +87,10 @@
                     <div class="col-12">
                         <input type="file" multiple (change)="uploadFile($event)" [attr.id]="doneItem.id">
                     </div>
+                    <div *ngFor="let file of uploading" class="col-12">
+                        {{file.name}}
+                        <ngb-progressbar type="success" [value]="file.progress | async" [striped]="true" [animated]="true"></ngb-progressbar>
+                    </div>                
                 </div>
                 <div class="row" *ngIf="doneItem.show" style="padding: 0.75rem 1.25rem;">
                     <div class="col-12">
@@ -132,6 +140,10 @@
                             <div class="col-12">
                                 <input type="file" multiple (change)="uploadFile($event)" [attr.id]="item.id">
                             </div>
+                            <div *ngFor="let file of uploading" class="col-12">
+                                {{file.name}}
+                                <ngb-progressbar type="success" [value]="file.progress | async" [striped]="true" [animated]="true"></ngb-progressbar>
+                            </div>                        
                         </div>
                         <div class="row" *ngIf="item.show" style="padding: 0.75rem 1.25rem;">
                             <div class="col-12">
@@ -179,6 +191,10 @@
                             <div class="col-12">
                                 <input type="file" multiple (change)="uploadFile($event)" [attr.id]="doneItem.id">
                             </div>
+                            <div *ngFor="let file of uploading" class="col-12">
+                                {{file.name}}
+                                <ngb-progressbar type="success" [value]="file.progress | async" [striped]="true" [animated]="true"></ngb-progressbar>
+                            </div>                        
                         </div>
                         <div class="row" *ngIf="doneItem.show" style="padding: 0.75rem 1.25rem;">
                             <div class="col-12">

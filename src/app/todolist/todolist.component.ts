@@ -15,6 +15,8 @@ import { SpinnerComponent } from '../spinner/spinner.component';
   styleUrls: ['./todolist.component.css']
 })
 export class TodolistComponent implements OnInit {
+  uploading:Array<any> = [];
+  counter:number = 0;
   faEdit = faEdit;
   faTrash = faTrash;
   spin:boolean;
@@ -113,23 +115,34 @@ export class TodolistComponent implements OnInit {
     try {
       const response = await this.firestore.collection('items').doc(event.target.id).get().toPromise();
       let array = response.data().files;
+      let forUpload = event.target.files;
       for(let i = 0; i < event.target.files.length; i++){
         if(response.data().files.findIndex(index => index.fileName === event.target.files[i].name)>-1){
           throw new Error('File ' + event.target.files[i].name + ' already exists on this item');
         }
       }
       for(let i = 0; i < event.target.files.length; i++){
-        this.uploadPercentage = this.storage.upload(event.target.id + '/' + event.target.files[i].name,event.target.files[i]).percentageChanges();
-        this.storage.upload(event.target.id + '/' + event.target.files[i].name,event.target.files[i]).snapshotChanges().pipe(finalize(()=>{
-          this.firestore.collection('items').doc(event.target.id).update({files: array}); 
-          this.uploadPercentage = null;
-        })).subscribe();
+        this.uploading.push({progress:0, name:forUpload[i].name});
+        this.uploadingFiles(event.target.id,forUpload[i],i);
         array.push({fileName: event.target.files[i].name, path: event.target.id + '/' + event.target.files[i].name});
       }
+      let interval = setInterval(()=>{
+        if(this.counter == forUpload.length){
+          this.firestore.collection('items').doc(event.target.id).update({files: array}); 
+          this.uploading = [];
+          clearInterval(interval);
+        }
+      },1500);
     } catch (err) {
       this.errorMessage = err.message;
       this.openSnackBar();
     }
+  }
+  uploadingFiles = (id, file, index) => {
+    this.uploading[index].progress = this.storage.upload(id+'/'+file.name,file).percentageChanges();
+    this.storage.upload(id + '/' + file.name,file).snapshotChanges().pipe(finalize(()=>{
+      this.counter++;
+    })).subscribe();
   }
   showFiles = async(id) => {
     try {
