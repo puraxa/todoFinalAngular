@@ -130,6 +130,7 @@ export class TodolistComponent implements OnInit {
         if(this.counter == forUpload.length){
           this.firestore.collection('items').doc(event.target.id).update({files: array}); 
           this.uploading = [];
+          this.counter = 0;
           clearInterval(interval);
         }
       },1500);
