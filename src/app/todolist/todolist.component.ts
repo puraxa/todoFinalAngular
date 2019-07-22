@@ -128,7 +128,7 @@ export class TodolistComponent implements OnInit {
       }
       let interval = setInterval(()=>{
         if(this.counter == forUpload.length){
-          this.firestore.collection('items').doc(event.target.id).update({files: array}); 
+          this.firestore.collection('items').doc(event.target.id).update({files: array, edit: false, show: true}); 
           this.uploading = [];
           this.counter = 0;
           clearInterval(interval);

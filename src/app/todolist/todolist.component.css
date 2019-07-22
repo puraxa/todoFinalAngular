@@ -18,3 +18,14 @@ button {
 .value:hover {
     cursor: pointer;
 }
+.upload-file {
+    font-size: 1em;
+}
+@media (min-width:576px){
+    button {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        top: 15px;
+    }
+}
