@@ -8,6 +8,9 @@ import { finalize } from 'rxjs/operators';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeletemodalComponent } from '../deletemodal/deletemodal.component';
+import { DeletefilemodalComponent } from '../deletefilemodal/deletefilemodal.component';
 
 @Component({
   selector: 'app-todolist',
@@ -27,7 +30,7 @@ export class TodolistComponent implements OnInit {
   errorMessage:string;
   uploadPercentage;
   opened:string;
-  constructor(private firestore:AngularFirestore,private storage:AngularFireStorage, private bottomSheet:MatBottomSheet, private snackBar:MatSnackBar) {
+  constructor(private firestore:AngularFirestore,private storage:AngularFireStorage, private bottomSheet:MatBottomSheet, private snackBar:MatSnackBar, public modal:NgbModal) {
     this.items = firestore.collection('items',ref => ref.where('done','==',false).orderBy('dateCreated','desc')).valueChanges();
     this.doneItems = firestore.collection('items', ref => ref.where('done','==',true).orderBy('dateCreated','desc')).valueChanges();
   }
@@ -161,6 +164,7 @@ export class TodolistComponent implements OnInit {
   }
   deleteItem = async(id) => {
     try {
+      await this.modal.open(DeletemodalComponent,{centered:true}).result;
       this.spin = true;
       const response = await this.firestore.collection('items').doc(id).get().toPromise();
       if (response.data().files.length > 0) {
@@ -171,13 +175,16 @@ export class TodolistComponent implements OnInit {
       await this.firestore.collection('items').doc(id).delete();
       this.spin = false;
     } catch (err) {
-      this.errorMessage = err.message;
-      this.spin = false;
-      this.openSnackBar();
+      if(err.message){
+        this.errorMessage = err.message;
+        this.spin = false;
+        this.openSnackBar();
+      }
     }
   }
   deleteFile = async(id, path) => {
     try {
+      await this.modal.open(DeletefilemodalComponent,{centered:true}).result;
       const response = await this.firestore.collection('items').doc(id).get().toPromise();
       const currentFiles = response.data().files;
       const newFiles:Array<any> = [];
@@ -189,8 +196,11 @@ export class TodolistComponent implements OnInit {
       await this.firestore.collection('items').doc(id).update({files: newFiles});
       await this.storage.storage.ref(path).delete();
     } catch (err) {
-      this.errorMessage = err.message;
-      this.spin = false;
+      if(err.message){
+        this.errorMessage = err.message;
+        this.openSnackBar();
+        this.spin = false;
+      }
     }
   }
 }

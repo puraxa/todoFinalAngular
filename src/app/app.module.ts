@@ -29,6 +29,8 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { TodolistComponent } from './todolist/todolist.component';
 import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { DeletemodalComponent } from './deletemodal/deletemodal.component';
+import { DeletefilemodalComponent } from './deletefilemodal/deletefilemodal.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { NavigationComponent } from './navigation/navigation.component';
     TodolistComponent,
     BottomSheetComponent,
     NavigationComponent,
+    DeletemodalComponent,
+    DeletefilemodalComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,7 +68,9 @@ import { NavigationComponent } from './navigation/navigation.component';
     FontAwesomeModule
   ],
   entryComponents:[
-    BottomSheetComponent
+    BottomSheetComponent,
+    DeletemodalComponent,
+    DeletefilemodalComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
