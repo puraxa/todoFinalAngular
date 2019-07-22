@@ -7,7 +7,7 @@
     <label for="files">Select files for upload</label>
     <input type="file" name="files" id="files" multiple class="upload-file">
     <br>
-    <button mat-raised-button type="submit" [disabled]="value.errors?.required || spin">Add</button>
+    <button mat-raised-button type="submit" [disabled]="value.errors?.required || disabled">Add</button>
     <mat-error>{{errorMessage}}</mat-error>
     <div *ngFor="let file of uploading">
         {{file.name}}

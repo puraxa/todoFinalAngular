@@ -14,12 +14,14 @@ export class BottomSheetComponent implements OnInit {
   uploading:Array<any> = [];
   files:Array<any> = [];
   counter:number = 0;
+  disabled:boolean;
   constructor(private storage:AngularFireStorage, private auth:AngularFireAuth, private firestore:AngularFirestore, private bottomSheet:MatBottomSheet) { }
 
   ngOnInit() {
   }
   addItem = async(event) => {
     try {
+      this.disabled = true;
       const id = this.firestore.createId();
       let files:Array<any> = [];
       const forUpload = event.target[1].files;
@@ -32,11 +34,13 @@ export class BottomSheetComponent implements OnInit {
         if(this.counter == forUpload.length){
           this.firestore.collection('items').doc(id).set({id: id,value: event.target[0].value, done: false, edit: false, show: false, dateCreated: new Date(), files:files});
           this.bottomSheet.dismiss();
+          this.disabled = false;
           clearInterval(interval);
         }
       },1500);
     } catch (err) {
       console.log(err);
+      this.disabled = false;
     }
   }
   uploadFile = (id, file, index) => {
