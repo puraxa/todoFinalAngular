@@ -57,6 +57,7 @@ export class TodolistComponent implements OnInit {
   openBottomSheet = () => {
     this.bottomSheet.open(BottomSheetComponent);
   }
+  //set item as !done
   done = async(id) => {
     try {
       const data = await this.firestore
@@ -74,6 +75,7 @@ export class TodolistComponent implements OnInit {
       this.openSnackBar();
     }
   }
+  //gets download url for file and opens it
   download = async(path) => {
     try {
       const url = await this.storage.ref(path).getDownloadURL().toPromise();
@@ -82,15 +84,14 @@ export class TodolistComponent implements OnInit {
       this.errorMessage = err.message;
       this.openSnackBar();
     }
-    // this.storage.ref(path).getDownloadURL();
-    // window.open(url)
-    // console.log(path);
   }
+  // drop event for drag and drop
   drop = (event) => {
     if(event.container != event.previousContainer){
       this.done(event.item.element.nativeElement.id);
     }
   }
+  //shows edit menu
   edit = async(id) => {
     try {
       if(this.opened != id){
@@ -105,6 +106,7 @@ export class TodolistComponent implements OnInit {
       this.openSnackBar();
     }
   }
+  //edits item value
   editItem = async(id) => {
     try {
       this.firestore.collection('items').doc(id).update({value: this.editValue});
@@ -114,6 +116,7 @@ export class TodolistComponent implements OnInit {
       this.openSnackBar();
     }
   }
+  //handles uploading files
   uploadFile = async(event) => {
     try {
       const response = await this.firestore.collection('items').doc(event.target.id).get().toPromise();
@@ -142,12 +145,14 @@ export class TodolistComponent implements OnInit {
       this.openSnackBar();
     }
   }
+  //creates proggres for every file that is selected for upload
   uploadingFiles = (id, file, index) => {
     this.uploading[index].progress = this.storage.upload(id+'/'+file.name,file).percentageChanges();
     this.storage.upload(id + '/' + file.name,file).snapshotChanges().pipe(finalize(()=>{
       this.counter++;
     })).subscribe();
   }
+  //show preview for files
   showFiles = async(id) => {
     try {
       if(this.opened != id){
@@ -162,6 +167,7 @@ export class TodolistComponent implements OnInit {
       this.openSnackBar();
     }
   }
+  // deletes item and all files attached to that item
   deleteItem = async(id) => {
     try {
       await this.modal.open(DeletemodalComponent,{centered:true}).result;
@@ -182,6 +188,7 @@ export class TodolistComponent implements OnInit {
       }
     }
   }
+  // deletes individual files
   deleteFile = async(id, path) => {
     try {
       await this.modal.open(DeletefilemodalComponent,{centered:true}).result;
